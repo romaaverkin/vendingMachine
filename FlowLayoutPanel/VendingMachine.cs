@@ -8,6 +8,7 @@ namespace FlowLayoutPanel
 {
     class VendingMachine
     {
+
         public int madeMoney { get; set; }
 
         public List<Drink> myDrinks = new List<Drink>

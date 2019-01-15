@@ -86,7 +86,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(421, 532);
+            this.ClientSize = new System.Drawing.Size(421, 646);
             this.Controls.Add(this.currentBalanceLabel);
             this.Controls.Add(this.buyButton);
             this.Controls.Add(this.madeLabel);

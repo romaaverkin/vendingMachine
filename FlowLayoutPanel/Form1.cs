@@ -13,6 +13,17 @@ namespace FlowLayoutPanel
     {
         VendingMachine vendingMachine;
 
+        private void howMuchMoneyInTheMachine()
+        {
+            String currentBalanse = "Сейчас есть\n";
+
+            foreach (Money money in vendingMachine.myMoney)
+            {
+                currentBalanse += money.Rating + " руб. в количестве " + money.Quantity + " штук\n";
+            }
+            currentBalanceLabel.Text = currentBalanse;
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -50,7 +61,7 @@ namespace FlowLayoutPanel
                 flowLayoutPanel2.Controls.Add(moneyButton);
             };
 
-            currentBalanceLabel.Text = "gdfgdg";
+            howMuchMoneyInTheMachine();
         }
 
         private void moneyButtonOnClick(object sender, EventArgs e)
@@ -59,7 +70,17 @@ namespace FlowLayoutPanel
             if (button != null)
             {
                 vendingMachine.madeMoney += Convert.ToInt32(button.Tag);
+                
+                for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+                {
+                    if (vendingMachine.myMoney[i].Rating == Convert.ToInt32(button.Tag))
+                    {
+                        vendingMachine.myMoney[i].Quantity++;
+                    }
+                }
+
                 madeLabel.Text = "Вы внесли " + Convert.ToString(vendingMachine.madeMoney) + " руб.";
+                howMuchMoneyInTheMachine();
             }
         }
 
