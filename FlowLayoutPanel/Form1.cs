@@ -40,10 +40,11 @@ namespace FlowLayoutPanel
                 {
                     Width = 150,
                     Name = "drinkButton" + i,
+                    Tag = vendingMachine.myDrinks[i].Price,
                     Text = vendingMachine.myDrinks[i].Name + " - " + vendingMachine.myDrinks[i].Price + " руб."
                 };
 
-                drinkButton.Click += ButtonOnClick;
+                drinkButton.Click += drinkButtonOnClick;
                 flowLayoutPanel1.Controls.Add(drinkButton);
             };
 
@@ -73,7 +74,7 @@ namespace FlowLayoutPanel
                 
                 for (int i = 0; i < vendingMachine.myMoney.Count; i++)
                 {
-                    if (vendingMachine.myMoney[i].Rating == Convert.ToInt32(button.Tag))
+                    if (vendingMachine.myMoney[i].Rating == vendingMachine.madeMoney)
                     {
                         vendingMachine.myMoney[i].Quantity++;
                     }
@@ -84,13 +85,23 @@ namespace FlowLayoutPanel
             }
         }
 
-        private void ButtonOnClick(object sender, EventArgs e)
+        private void drinkButtonOnClick(object sender, EventArgs e)
         {
             var button = (Button)sender;
 
             if (button != null)
             {
-                MessageBox.Show("Сорт: " + button.Name);
+                vendingMachine.selectdDrink = Convert.ToInt32(button.Tag);
+                string myDrinks = "";
+
+                for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
+                {
+                    if (vendingMachine.myDrinks[i].Price == vendingMachine.selectdDrink)
+                    {
+                        myDrinks = vendingMachine.myDrinks[i].Name;
+                    }
+                }
+                selectDrinkButton.Text = "Вы выбрали " + myDrinks + " цена " + vendingMachine.selectdDrink;
             }
         }
     }

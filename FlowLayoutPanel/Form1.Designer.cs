@@ -33,6 +33,7 @@
             this.madeLabel = new System.Windows.Forms.Label();
             this.buyButton = new System.Windows.Forms.Button();
             this.currentBalanceLabel = new System.Windows.Forms.Label();
+            this.selectDrinkButton = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -59,7 +60,7 @@
             // madeLabel
             // 
             this.madeLabel.AutoSize = true;
-            this.madeLabel.Location = new System.Drawing.Point(150, 350);
+            this.madeLabel.Location = new System.Drawing.Point(156, 407);
             this.madeLabel.Name = "madeLabel";
             this.madeLabel.Size = new System.Drawing.Size(93, 13);
             this.madeLabel.TabIndex = 2;
@@ -67,7 +68,7 @@
             // 
             // buyButton
             // 
-            this.buyButton.Location = new System.Drawing.Point(168, 402);
+            this.buyButton.Location = new System.Drawing.Point(159, 451);
             this.buyButton.Name = "buyButton";
             this.buyButton.Size = new System.Drawing.Size(75, 23);
             this.buyButton.TabIndex = 3;
@@ -82,11 +83,21 @@
             this.currentBalanceLabel.Size = new System.Drawing.Size(0, 13);
             this.currentBalanceLabel.TabIndex = 4;
             // 
+            // selectDrinkButton
+            // 
+            this.selectDrinkButton.AutoSize = true;
+            this.selectDrinkButton.Location = new System.Drawing.Point(153, 356);
+            this.selectDrinkButton.Name = "selectDrinkButton";
+            this.selectDrinkButton.Size = new System.Drawing.Size(101, 13);
+            this.selectDrinkButton.TabIndex = 5;
+            this.selectDrinkButton.Text = "Выберите напиток";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 646);
+            this.Controls.Add(this.selectDrinkButton);
             this.Controls.Add(this.currentBalanceLabel);
             this.Controls.Add(this.buyButton);
             this.Controls.Add(this.madeLabel);
@@ -107,6 +118,7 @@
         private System.Windows.Forms.Label madeLabel;
         private System.Windows.Forms.Button buyButton;
         private System.Windows.Forms.Label currentBalanceLabel;
+        private System.Windows.Forms.Label selectDrinkButton;
     }
 }
 
