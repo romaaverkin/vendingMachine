@@ -21,7 +21,30 @@ namespace FlowLayoutPanel
             {
                 currentBalanse += $"{money.Rating} руб. в количестве {money.Quantity} штук\n";
             }
-            currentBalanceLabel.Text = currentBalanse;
+            currentBalanceVendingMachineLabel.Text = currentBalanse;
+        }
+
+        private void lockReceiveButtons()
+        {
+            if (!vendingMachine.publicIsSelected)
+            {
+                for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+                {
+                    flowLayoutPanel2.Controls["moneyButton" + i].Enabled = true;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+                {
+                    flowLayoutPanel2.Controls["moneyButton" + i].Enabled = false;
+                }
+            }
+        }
+
+        public void yourChange()
+        {
+
         }
 
         public Form1()
@@ -75,10 +98,34 @@ namespace FlowLayoutPanel
                 int buttonTag = Convert.ToInt32(button.Tag);
                 Money insertedCoin = vendingMachine.myMoney[buttonTag];
 
-                vendingMachine.madeMoney += insertedCoin.Rating;
+                vendingMachine.moneyInvested += insertedCoin.Rating;
                 insertedCoin.Quantity++;
 
-                madeLabel.Text = $"Вы внесли {Convert.ToString(vendingMachine.madeMoney)} руб.";
+                int selectedDrinkPrice = vendingMachine.selectedDrinkPrice;
+                int moneyInvested = vendingMachine.moneyInvested;
+
+                if (selectedDrinkPrice > moneyInvested)
+                {
+                    paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
+                        $"Осталось {selectedDrinkPrice - moneyInvested} руб.";
+                }
+                else if (selectedDrinkPrice == moneyInvested)
+                {
+                    buyButton.Enabled = true;
+                    paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
+                        $"Ваша сдача 0 руб.";
+                    vendingMachine.publicIsSelected = true;
+                    lockReceiveButtons();
+                }
+                else
+                {
+                    buyButton.Enabled = true;
+                    paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
+                        $"Ваша сдача {selectedDrinkPrice - moneyInvested} руб.";
+                    vendingMachine.publicIsSelected = true;
+                    lockReceiveButtons();
+                }
+
                 howMuchMoneyInTheMachine();
             }
         }
@@ -92,17 +139,20 @@ namespace FlowLayoutPanel
                 int buttonTag = Convert.ToInt32(button.Tag);
                 Drink selectedDrink = vendingMachine.myDrinks[buttonTag];
 
-                vendingMachine.selectedDrink = selectedDrink.Price;
+                vendingMachine.selectedDrinkPrice = selectedDrink.Price;
                 selectDrinkButton.Text = $"Вы выбрали\n{selectedDrink.Name} цена {selectedDrink.Price} руб.";
 
-                if (!vendingMachine.publicIsSelected)
-                {
-                    for (int i = 0; i < vendingMachine.myMoney.Count; i++)
-                    {
-                        flowLayoutPanel2.Controls["moneyButton" + i].Enabled = true;
-                    }
-                }
+                lockReceiveButtons();
             }
+        }
+
+        private void buyButton_Click(object sender, EventArgs e)
+        {
+            vendingMachine.moneyInvested = 0;
+            vendingMachine.publicIsSelected = false;
+            paymentLabel.Text = "Вы внесли 0 руб.";
+            selectDrinkButton.Text = "Выберите напиток";
+            MessageBox.Show("Спасибо за покупку!");
         }
     }
 }

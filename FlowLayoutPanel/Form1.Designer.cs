@@ -30,10 +30,11 @@
         {
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.madeLabel = new System.Windows.Forms.Label();
+            this.paymentLabel = new System.Windows.Forms.Label();
             this.buyButton = new System.Windows.Forms.Button();
-            this.currentBalanceLabel = new System.Windows.Forms.Label();
+            this.currentBalanceVendingMachineLabel = new System.Windows.Forms.Label();
             this.selectDrinkButton = new System.Windows.Forms.Label();
+            this.yourСhangelabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -57,31 +58,33 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(180, 300);
             this.flowLayoutPanel2.TabIndex = 1;
             // 
-            // madeLabel
+            // paymentLabel
             // 
-            this.madeLabel.AutoSize = true;
-            this.madeLabel.Location = new System.Drawing.Point(260, 18);
-            this.madeLabel.Name = "madeLabel";
-            this.madeLabel.Size = new System.Drawing.Size(93, 13);
-            this.madeLabel.TabIndex = 2;
-            this.madeLabel.Text = "Вы внесли 0 руб.";
+            this.paymentLabel.AutoSize = true;
+            this.paymentLabel.Location = new System.Drawing.Point(260, 18);
+            this.paymentLabel.Name = "paymentLabel";
+            this.paymentLabel.Size = new System.Drawing.Size(93, 13);
+            this.paymentLabel.TabIndex = 2;
+            this.paymentLabel.Text = "Вы внесли 0 руб.";
             // 
             // buyButton
             // 
-            this.buyButton.Location = new System.Drawing.Point(159, 451);
+            this.buyButton.Enabled = false;
+            this.buyButton.Location = new System.Drawing.Point(172, 369);
             this.buyButton.Name = "buyButton";
             this.buyButton.Size = new System.Drawing.Size(75, 23);
             this.buyButton.TabIndex = 3;
             this.buyButton.Text = "Купить";
             this.buyButton.UseVisualStyleBackColor = true;
+            this.buyButton.Click += new System.EventHandler(this.buyButton_Click);
             // 
-            // currentBalanceLabel
+            // currentBalanceVendingMachineLabel
             // 
-            this.currentBalanceLabel.AutoSize = true;
-            this.currentBalanceLabel.Location = new System.Drawing.Point(153, 451);
-            this.currentBalanceLabel.Name = "currentBalanceLabel";
-            this.currentBalanceLabel.Size = new System.Drawing.Size(0, 13);
-            this.currentBalanceLabel.TabIndex = 4;
+            this.currentBalanceVendingMachineLabel.AutoSize = true;
+            this.currentBalanceVendingMachineLabel.Location = new System.Drawing.Point(12, 449);
+            this.currentBalanceVendingMachineLabel.Name = "currentBalanceVendingMachineLabel";
+            this.currentBalanceVendingMachineLabel.Size = new System.Drawing.Size(0, 13);
+            this.currentBalanceVendingMachineLabel.TabIndex = 4;
             // 
             // selectDrinkButton
             // 
@@ -92,15 +95,24 @@
             this.selectDrinkButton.TabIndex = 5;
             this.selectDrinkButton.Text = "Выберите напиток";
             // 
+            // yourСhangelabel
+            // 
+            this.yourСhangelabel.AutoSize = true;
+            this.yourСhangelabel.Location = new System.Drawing.Point(220, 449);
+            this.yourСhangelabel.Name = "yourСhangelabel";
+            this.yourСhangelabel.Size = new System.Drawing.Size(0, 13);
+            this.yourСhangelabel.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 646);
+            this.Controls.Add(this.yourСhangelabel);
             this.Controls.Add(this.selectDrinkButton);
-            this.Controls.Add(this.currentBalanceLabel);
+            this.Controls.Add(this.currentBalanceVendingMachineLabel);
             this.Controls.Add(this.buyButton);
-            this.Controls.Add(this.madeLabel);
+            this.Controls.Add(this.paymentLabel);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "Form1";
@@ -115,10 +127,11 @@
 
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-        private System.Windows.Forms.Label madeLabel;
+        private System.Windows.Forms.Label paymentLabel;
         private System.Windows.Forms.Button buyButton;
-        private System.Windows.Forms.Label currentBalanceLabel;
+        private System.Windows.Forms.Label currentBalanceVendingMachineLabel;
         private System.Windows.Forms.Label selectDrinkButton;
+        private System.Windows.Forms.Label yourСhangelabel;
     }
 }
 

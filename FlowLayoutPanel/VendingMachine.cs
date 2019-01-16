@@ -9,8 +9,8 @@ namespace FlowLayoutPanel
     class VendingMachine
     {
 
-        public int madeMoney { get; set; }
-        public int selectedDrink { get; set; }
+        public int moneyInvested { get; set; }
+        public int selectedDrinkPrice { get; set; }
         public bool publicIsSelected { get; set; } = false;
 
         public List<Drink> myDrinks = new List<Drink>
