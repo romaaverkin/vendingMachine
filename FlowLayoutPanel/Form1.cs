@@ -19,7 +19,7 @@ namespace FlowLayoutPanel
 
             foreach (Money money in vendingMachine.myMoney)
             {
-                currentBalanse += money.Rating + " руб. в количестве " + money.Quantity + " штук\n";
+                currentBalanse += $"{money.Rating} руб. в количестве {money.Quantity} штук\n";
             }
             currentBalanceLabel.Text = currentBalanse;
         }
@@ -40,8 +40,8 @@ namespace FlowLayoutPanel
                 {
                     Width = 150,
                     Name = "drinkButton" + i,
-                    Tag = vendingMachine.myDrinks[i].Price,
-                    Text = vendingMachine.myDrinks[i].Name + " - " + vendingMachine.myDrinks[i].Price + " руб."
+                    Tag = i,
+                    Text = $"{vendingMachine.myDrinks[i].Name} - {vendingMachine.myDrinks[i].Price} руб."
                 };
 
                 drinkButton.Click += drinkButtonOnClick;
@@ -54,8 +54,8 @@ namespace FlowLayoutPanel
                 {
                     Width = 150,
                     Name = "moneyButton" + i,
-                    Tag = vendingMachine.myMoney[i].Rating,
-                    Text = "Внести " + vendingMachine.myMoney[i].Rating + " руб."
+                    Tag = i,
+                    Text = $"Внести {vendingMachine.myMoney[i].Rating} руб."
                 };
 
                 moneyButton.Click += moneyButtonOnClick;
@@ -68,19 +68,16 @@ namespace FlowLayoutPanel
         private void moneyButtonOnClick(object sender, EventArgs e)
         {
             var button = (Button)sender;
+
             if (button != null)
             {
-                vendingMachine.madeMoney += Convert.ToInt32(button.Tag);
-                
-                for (int i = 0; i < vendingMachine.myMoney.Count; i++)
-                {
-                    if (vendingMachine.myMoney[i].Rating == vendingMachine.madeMoney)
-                    {
-                        vendingMachine.myMoney[i].Quantity++;
-                    }
-                }
+                int buttonTag = Convert.ToInt32(button.Tag);
+                Money insertedCoin = vendingMachine.myMoney[buttonTag];
 
-                madeLabel.Text = "Вы внесли " + Convert.ToString(vendingMachine.madeMoney) + " руб.";
+                vendingMachine.madeMoney += insertedCoin.Rating;
+                insertedCoin.Quantity++;
+
+                madeLabel.Text = $"Вы внесли {Convert.ToString(vendingMachine.madeMoney)} руб.";
                 howMuchMoneyInTheMachine();
             }
         }
@@ -91,17 +88,11 @@ namespace FlowLayoutPanel
 
             if (button != null)
             {
-                vendingMachine.selectdDrink = Convert.ToInt32(button.Tag);
-                string myDrinks = "";
+                int buttonTag = Convert.ToInt32(button.Tag);
+                Drink selectedDrink = vendingMachine.myDrinks[buttonTag];
 
-                for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
-                {
-                    if (vendingMachine.myDrinks[i].Price == vendingMachine.selectdDrink)
-                    {
-                        myDrinks = vendingMachine.myDrinks[i].Name;
-                    }
-                }
-                selectDrinkButton.Text = "Вы выбрали " + myDrinks + " цена " + vendingMachine.selectdDrink;
+                vendingMachine.selectedDrink = selectedDrink.Price;
+                selectDrinkButton.Text = $"Вы выбрали {selectedDrink.Name} цена {selectedDrink.Price} руб.";
             }
         }
     }

@@ -10,7 +10,7 @@ namespace FlowLayoutPanel
     {
 
         public int madeMoney { get; set; }
-        public int selectdDrink { get; set; }
+        public int selectedDrink { get; set; }
 
         public List<Drink> myDrinks = new List<Drink>
         {
