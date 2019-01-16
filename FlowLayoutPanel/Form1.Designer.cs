@@ -40,7 +40,7 @@
             // 
             this.flowLayoutPanel1.AutoScroll = true;
             this.flowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(15, 15);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(15, 50);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(10);
@@ -50,7 +50,7 @@
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(223, 15);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(223, 50);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(10);
@@ -60,7 +60,7 @@
             // madeLabel
             // 
             this.madeLabel.AutoSize = true;
-            this.madeLabel.Location = new System.Drawing.Point(156, 407);
+            this.madeLabel.Location = new System.Drawing.Point(260, 18);
             this.madeLabel.Name = "madeLabel";
             this.madeLabel.Size = new System.Drawing.Size(93, 13);
             this.madeLabel.TabIndex = 2;
@@ -86,7 +86,7 @@
             // selectDrinkButton
             // 
             this.selectDrinkButton.AutoSize = true;
-            this.selectDrinkButton.Location = new System.Drawing.Point(153, 356);
+            this.selectDrinkButton.Location = new System.Drawing.Point(52, 18);
             this.selectDrinkButton.Name = "selectDrinkButton";
             this.selectDrinkButton.Size = new System.Drawing.Size(101, 13);
             this.selectDrinkButton.TabIndex = 5;

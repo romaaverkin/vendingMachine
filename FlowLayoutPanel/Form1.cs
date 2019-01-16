@@ -15,7 +15,7 @@ namespace FlowLayoutPanel
 
         private void howMuchMoneyInTheMachine()
         {
-            String currentBalanse = "Сейчас есть\n";
+            string currentBalanse = "Сейчас есть\n";
 
             foreach (Money money in vendingMachine.myMoney)
             {
@@ -41,7 +41,7 @@ namespace FlowLayoutPanel
                     Width = 150,
                     Name = "drinkButton" + i,
                     Tag = i,
-                    Text = $"{vendingMachine.myDrinks[i].Name} - {vendingMachine.myDrinks[i].Price} руб."
+                    Text = $"{vendingMachine.myDrinks[i].Name} - {vendingMachine.myDrinks[i].Price} руб.",
                 };
 
                 drinkButton.Click += drinkButtonOnClick;
@@ -52,10 +52,11 @@ namespace FlowLayoutPanel
             {
                 Button moneyButton = new Button()
                 {
-                    Width = 150,
                     Name = "moneyButton" + i,
+                    Width = 150,
                     Tag = i,
-                    Text = $"Внести {vendingMachine.myMoney[i].Rating} руб."
+                    Text = $"Внести {vendingMachine.myMoney[i].Rating} руб.",
+                    Enabled = false
                 };
 
                 moneyButton.Click += moneyButtonOnClick;
@@ -92,7 +93,15 @@ namespace FlowLayoutPanel
                 Drink selectedDrink = vendingMachine.myDrinks[buttonTag];
 
                 vendingMachine.selectedDrink = selectedDrink.Price;
-                selectDrinkButton.Text = $"Вы выбрали {selectedDrink.Name} цена {selectedDrink.Price} руб.";
+                selectDrinkButton.Text = $"Вы выбрали\n{selectedDrink.Name} цена {selectedDrink.Price} руб.";
+
+                if (!vendingMachine.publicIsSelected)
+                {
+                    for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+                    {
+                        flowLayoutPanel2.Controls["moneyButton" + i].Enabled = true;
+                    }
+                }
             }
         }
     }

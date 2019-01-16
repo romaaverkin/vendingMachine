@@ -11,6 +11,7 @@ namespace FlowLayoutPanel
 
         public int madeMoney { get; set; }
         public int selectedDrink { get; set; }
+        public bool publicIsSelected { get; set; } = false;
 
         public List<Drink> myDrinks = new List<Drink>
         {
