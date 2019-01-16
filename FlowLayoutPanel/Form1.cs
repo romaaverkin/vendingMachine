@@ -42,6 +42,24 @@ namespace FlowLayoutPanel
             }
         }
 
+        private void lockDrinkButtons()
+        {
+            if (!vendingMachine.publicIsSelected)
+            {          
+                for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
+                {
+                    flowLayoutPanel1.Controls["drinkButton" + i].Enabled = false;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
+                {
+                    flowLayoutPanel1.Controls["drinkButton" + i].Enabled = true;
+                }
+            }
+        }
+
         public void yourChange()
         {
 
@@ -141,15 +159,18 @@ namespace FlowLayoutPanel
 
                 vendingMachine.selectedDrinkPrice = selectedDrink.Price;
                 selectDrinkButton.Text = $"Вы выбрали\n{selectedDrink.Name} цена {selectedDrink.Price} руб.";
+                vendingMachine.publicIsSelected = false;
 
                 lockReceiveButtons();
+                lockDrinkButtons();
             }
         }
 
         private void buyButton_Click(object sender, EventArgs e)
         {
             vendingMachine.moneyInvested = 0;
-            vendingMachine.publicIsSelected = false;
+            vendingMachine.publicIsSelected = true;
+            lockDrinkButtons();
             paymentLabel.Text = "Вы внесли 0 руб.";
             selectDrinkButton.Text = "Выберите напиток";
             MessageBox.Show("Спасибо за покупку!");
