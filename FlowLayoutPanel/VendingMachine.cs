@@ -13,7 +13,7 @@ namespace FlowLayoutPanel
         public int AmountPaid { get; set; } = 0; //Внесенная клиентом сумма
         public int SelectedDrinkPrice { get; set; } //Цена выбранного клиентом напитка
         public bool AmountPaidInFull { get; set; } = false; //Полностью внесенная сумма
-        private List<Money> moneyForChange = new List<Money>(); // Монеты для сдачи
+        public List<Money> moneyForChange = new List<Money>(); //монеты для сдачи
 
         //Коллекция видов кофе
         public List<Drink> myDrinks = new List<Drink>
@@ -41,32 +41,24 @@ namespace FlowLayoutPanel
             new Money(1, 15)
         };
 
-        //Внесенные клиентом монеты до транзакции
-        public List<Money> customerMoney = new List<Money>
-        {
-            new Money(2, 0),
-            new Money(10, 0),
-            new Money(5, 0),
-            new Money(25, 0),
-            new Money(1, 0)
-        };
-
         //Конструктор
         public VendingMachine()
         {
             myDrinks.Sort();
             moneyInVendingMashine.Sort();
-            customerMoney.Sort();
 
-            //Заполняем коллекцию для сдачи
-            ClearClientCollection();
+            //заполняем коллекцию для сдачи
+            for (int i = 0; i < moneyInVendingMashine.Count; i++)
+            {
+                moneyForChange.Add(new Money(moneyInVendingMashine[i].Rating, 0));
+            }
         }            
 
         //Клиент вносит деньги
         public void CustomerDepositsMoney(int tag)
         {
-            customerMoney[tag].Quantity++;
-            AmountPaid += customerMoney[tag].Rating;
+            moneyInVendingMashine[tag].Quantity++;
+            AmountPaid += moneyInVendingMashine[tag].Rating;
         }
 
         //Узнать сколько денег осталось заплатить
@@ -98,7 +90,7 @@ namespace FlowLayoutPanel
 
             for (int i = 0; i < moneyInVendingMashine.Count; i++)
             {
-                CoinsInTheMachine += $"{moneyInVendingMashine[i].Rating} руб. в количестве {moneyInVendingMashine[i].Quantity + customerMoney[i].Quantity} штук\n";
+                CoinsInTheMachine += $"{moneyInVendingMashine[i].Rating} руб. в количестве {moneyInVendingMashine[i].Quantity} штук\n";
             }
 
             return CoinsInTheMachine;
@@ -107,14 +99,12 @@ namespace FlowLayoutPanel
         //Сдача
         public string YourChange()
         {
+
             //сумма сдачи
             int amountOfChange = AmountPaid - SelectedDrinkPrice;
-            //Сумма монет определенного номинала в автомате
-            int SumTotal = 0;
 
             for (int i = moneyInVendingMashine.Count - 1; i >= 0; i--)
             {
-                SumTotal = moneyInVendingMashine[i].Quantity + customerMoney[i].Quantity;
 
                 if (amountOfChange < moneyInVendingMashine[i].Rating)
                 {
@@ -122,24 +112,24 @@ namespace FlowLayoutPanel
                 }
                 else if (amountOfChange == moneyInVendingMashine[i].Rating)
                 {
-                    if (SumTotal != 0)
+                    if (moneyInVendingMashine[i].Quantity != 0)
                     {
                         amountOfChange = 0;
+                        moneyInVendingMashine[i].Quantity--;
                         moneyForChange[i].Quantity++;
                         Transaction = true;
                         break;
-                        //moneyInVendingMachine[i].Quantity--;
-                        //Выдать сдачу
                     }
                     else
                     {
                         continue;
                     }
                 }
-                else if (SumTotal != 0)
+                else if (moneyInVendingMashine[i].Quantity != 0)
                 {
-                    while (SumTotal != 0 && amountOfChange >= moneyInVendingMashine[i].Rating)
+                    while (moneyInVendingMashine[i].Quantity != 0 && amountOfChange >= moneyInVendingMashine[i].Rating)
                     {
+                        moneyInVendingMashine[i].Quantity--;
                         moneyForChange[i].Quantity++;
                         amountOfChange -= moneyInVendingMashine[i].Rating;
                     }
@@ -151,47 +141,30 @@ namespace FlowLayoutPanel
 
             }
 
+            AmountPaid = 0;
             //вспомогательная функция
-            return myChande();
+            return MyChange();
 
         }
 
         //Выдать сдачу
-        public string myChande()
+        public string MyChange()
         {
             string change = "Монеты для садчи\n";
-
-            //перекладываем монеты из коллекции клиента в коллекцию автомата
-            for (int i = 0; i < customerMoney.Count; i++)
-            {
-                moneyInVendingMashine[i].Quantity += customerMoney[i].Quantity;
-            }
-
-            //очищаем коллекцию клиента
-            ClearClientCollection();
-
-            //убираем из автомата монеты, которые пойдут на сдачу
-            for (int j = 0; j < moneyForChange.Count; j++)
-            {
-                moneyInVendingMashine[j].Quantity -= moneyForChange[j].Quantity;
-            }
 
             //формируем строку для сдачи
             for (int j = 0; j < moneyForChange.Count; j++)
             {
-                change += $"{moneyInVendingMashine[j].Quantity.ToString()} штук по {moneyInVendingMashine[j].Rating.ToString()}";
+                change += $"{moneyForChange[j].Quantity.ToString()} штук по {moneyForChange[j].Rating.ToString()}\n";
+            }
+
+            //очищаем коллекцию для сдачи
+            for (int i = 0; i < moneyInVendingMashine.Count; i++)
+            {
+                moneyForChange[i].Quantity = 0;
             }
 
             return change;
-        }
-
-        //очистить коллекцию клиента
-        public void ClearClientCollection()
-        {
-            for (int i = 0; i < moneyInVendingMashine.Count; i++)
-            {
-                moneyForChange.Add(new Money(moneyInVendingMashine[i].Rating, 0));
-            }
         }
     }
 }

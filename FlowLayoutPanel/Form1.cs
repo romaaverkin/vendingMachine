@@ -71,7 +71,7 @@ namespace FlowLayoutPanel
 
                 //Если кофе не выбран то кнопки внести деньги не активны и наоборот
                 LockMoneyButtons();
-                //Если сумма за кофе внесена не полностью, то кнопуи выбора кофе не активны
+                //Если сумма за кофе внесена не полностью, то кнопки выбора кофе не активны
                 LockDrinkButtons();
             }
         }
@@ -136,6 +136,8 @@ namespace FlowLayoutPanel
         //Если сумма за кофе внесена не полностью, то кнопуи выбора кофе не активны
         private void LockDrinkButtons()
         {
+            yourСhangelabel.Text = "";
+
             if (!vendingMachine.AmountPaidInFull)
             {
                 for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
@@ -164,86 +166,12 @@ namespace FlowLayoutPanel
         private void BuyButton_Click(object sender, EventArgs e)
         {
             buyButton.Enabled = false;
-            yourСhangelabel.Text = "";
-            vendingMachine.AmountPaid = 0;
-            vendingMachine.AmountPaidInFull = true;
             LockDrinkButtons();
             paymentLabel.Text = "Вы внесли 0 руб.";
             selectDrinkButton.Text = "Выберите напиток";
             MessageBox.Show("Спасибо за покупку!");
-            vendingMachine.YourChange();
+            yourСhangelabel.Text = vendingMachine.YourChange();
+            HowMuchMoneyInTheMachine();
         }
-
-        ////Сдача
-        //public void YourChange()
-        //{
-        //    //сумма сдачи
-        //    int amountOfChange = vendingMachine.AmountPaid - vendingMachine.SelectedDrinkPrice;
-        //    int totalSurrender = amountOfChange;
-        //    List<Money> moneyInVendingMashine = vendingMachine.moneyInVendingMashine;
-        //    List<Money> moneyForChange = new List<Money>();
-
-        //    for (int n = 0; n < vendingMachine.moneyInVendingMashine.Count; n++)
-        //    {
-        //        moneyForChange.Add(new Money(vendingMachine.moneyInVendingMashine[n].Rating, 0));
-        //    }
-
-        //    for (int i = vendingMachine.moneyInVendingMashine.Count - 1; i >= 0; i--)
-        //    {
-        //        if (amountOfChange < moneyInVendingMashine[i].Rating)
-        //        {
-        //            continue;
-        //        }
-        //        else if (amountOfChange == moneyInVendingMashine[i].Rating)
-        //        {
-        //            if (moneyInVendingMashine[i].Quantity != 0)
-        //            {
-        //                amountOfChange = 0;
-        //                moneyForChange[i].Quantity++;
-        //                moneyInVendingMashine[i].Quantity--;
-        //            }
-        //            else
-        //            {
-        //                continue;
-        //            }
-        //        }
-        //        else if (moneyInVendingMashine[i].Quantity != 0)
-        //        {
-        //            while (moneyInVendingMashine[i].Quantity != 0 && amountOfChange >= moneyInVendingMashine[i].Rating)
-        //            {
-        //                moneyForChange[i].Quantity++;
-        //                moneyInVendingMashine[i].Quantity--;
-        //                amountOfChange -= moneyInVendingMashine[i].Rating;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            continue;
-        //        }
-        //    }
-
-        //    int changeinList = 0;
-
-        //    for (int j = 0; j < moneyForChange.Count; j++)
-        //    {
-        //        changeinList += moneyForChange[j].Quantity * moneyForChange[j].Rating;
-        //    }
-
-        //    if (changeinList > totalSurrender)
-        //    {
-        //        string change = "Монеты для садчи\n";
-
-        //        for (int m = 0; m < moneyForChange.Count; m++)
-        //        {
-        //            change += $"{moneyForChange[m].Quantity.ToString()} штук по {moneyForChange[m].Rating.ToString()} рублей\n";
-        //        }
-
-        //        yourСhangelabel.Text = change;
-        //    }
-        //    else
-        //    {
-        //        yourСhangelabel.Text = "Извините не хватает\nсдачи для выдачи";
-        //    }
-        //}
     }
 }
