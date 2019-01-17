@@ -159,13 +159,28 @@ namespace FlowLayoutPanel
 
             currentBalanceVendingMachineLabel.Text = CoinsInTheMachine;
         }
+                
+        //Нажатие кнопки купить
+        private void BuyButton_Click(object sender, EventArgs e)
+        {
+            buyButton.Enabled = false;
+            yourСhangelabel.Text = "";
+            vendingMachine.AmountPaid = 0;
+            vendingMachine.AmountPaidInFull = true;
+            LockDrinkButtons();
+            paymentLabel.Text = "Вы внесли 0 руб.";
+            selectDrinkButton.Text = "Выберите напиток";
+            MessageBox.Show("Спасибо за покупку!");
+            YourChange();
+        }
 
         //Сдача
-        public void yourChange()
+        public void YourChange()
         {
-            int remainingChange = vendingMachine.AmountPaid - vendingMachine.SelectedDrinkPrice;
-            int totalSurrender = remainingChange;
-            List<Money> moneyInVendingMachine = vendingMachine.moneyInVendingMashine;
+            //сумма сдачи
+            int amountOfChange = vendingMachine.AmountPaid - vendingMachine.SelectedDrinkPrice;
+            int totalSurrender = amountOfChange;
+            List<Money> moneyInVendingMashine = vendingMachine.moneyInVendingMashine;
             List<Money> moneyForChange = new List<Money>();
 
             for (int n = 0; n < vendingMachine.moneyInVendingMashine.Count; n++)
@@ -175,30 +190,30 @@ namespace FlowLayoutPanel
 
             for (int i = vendingMachine.moneyInVendingMashine.Count - 1; i >= 0; i--)
             {
-                if (remainingChange < moneyInVendingMachine[i].Rating)
+                if (amountOfChange < moneyInVendingMashine[i].Rating)
                 {
                     continue;
                 }
-                else if (remainingChange == moneyInVendingMachine[i].Rating)
+                else if (amountOfChange == moneyInVendingMashine[i].Rating)
                 {
-                    if (moneyInVendingMachine[i].Quantity != 0)
+                    if (moneyInVendingMashine[i].Quantity != 0)
                     {
-                        remainingChange = 0;
+                        amountOfChange = 0;
                         moneyForChange[i].Quantity++;
-                        moneyInVendingMachine[i].Quantity--;
+                        moneyInVendingMashine[i].Quantity--;
                     }
                     else
                     {
                         continue;
                     }
                 }
-                else if (moneyInVendingMachine[i].Quantity != 0)
+                else if (moneyInVendingMashine[i].Quantity != 0)
                 {
-                    while (moneyInVendingMachine[i].Quantity != 0 && remainingChange >= moneyInVendingMachine[i].Rating)
+                    while (moneyInVendingMashine[i].Quantity != 0 && amountOfChange >= moneyInVendingMashine[i].Rating)
                     {
                         moneyForChange[i].Quantity++;
-                        moneyInVendingMachine[i].Quantity--;
-                        remainingChange -= moneyInVendingMachine[i].Rating;
+                        moneyInVendingMashine[i].Quantity--;
+                        amountOfChange -= moneyInVendingMashine[i].Rating;
                     }
                 }
                 else
@@ -229,19 +244,6 @@ namespace FlowLayoutPanel
             {
                 yourСhangelabel.Text = "Извините не хватает\nсдачи для выдачи";
             }
-        }
-
-        //Нажатие кнопки купить
-        private void BuyButton_Click(object sender, EventArgs e)
-        {
-            buyButton.Enabled = false;
-            yourСhangelabel.Text = "";
-            vendingMachine.AmountPaid = 0;
-            vendingMachine.AmountPaidInFull = true;
-            LockDrinkButtons();
-            paymentLabel.Text = "Вы внесли 0 руб.";
-            selectDrinkButton.Text = "Выберите напиток";
-            MessageBox.Show("Спасибо за покупку!");
         }
     }
 }

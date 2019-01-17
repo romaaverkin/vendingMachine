@@ -13,14 +13,8 @@ namespace FlowLayoutPanel
         public int AmountPaid { get; set; } = 0; //Внесенная клиентом сумма
         public int SelectedDrinkPrice { get; set; } //Цена выбранного клиентом напитка
         public bool AmountPaidInFull { get; set; } = false; //Полностью внесенная сумма
+        private List<Money> moneyForChange = new List<Money>(); // Монеты для сдачи
 
-        public VendingMachine()
-        {
-            myDrinks.Sort();
-            moneyInVendingMashine.Sort();
-            customerMoney.Sort();
-        }
-                
         //Коллекция видов кофе
         public List<Drink> myDrinks = new List<Drink>
         {
@@ -41,10 +35,10 @@ namespace FlowLayoutPanel
             //new Money(1, 0)
 
             new Money(2, 10),
-            new Money(10, 15),
+            new Money(10, 10),
             new Money(5, 10),
             new Money(25, 2),
-            new Money(1, 10)
+            new Money(1, 15)
         };
 
         //Внесенные клиентом монеты до транзакции
@@ -56,6 +50,17 @@ namespace FlowLayoutPanel
             new Money(25, 0),
             new Money(1, 0)
         };
+
+        //Конструктор
+        public VendingMachine()
+        {
+            myDrinks.Sort();
+            moneyInVendingMashine.Sort();
+            customerMoney.Sort();
+
+            //Заполняем коллекцию для сдачи
+            ClearClientCollection();
+        }            
 
         //Клиент вносит деньги
         public void CustomerDepositsMoney(int tag)
@@ -89,7 +94,6 @@ namespace FlowLayoutPanel
         //Узнать сколько монет есть в машине
         public string FindOutWhatCoinsInTheMachine()
         {
-            List<Money> customerMoney123 = customerMoney;
             string CoinsInTheMachine = "Сейчас есть\n";
 
             for (int i = 0; i < moneyInVendingMashine.Count; i++)
@@ -98,6 +102,96 @@ namespace FlowLayoutPanel
             }
 
             return CoinsInTheMachine;
+        }
+
+        //Сдача
+        public string YourChange()
+        {
+            //сумма сдачи
+            int amountOfChange = AmountPaid - SelectedDrinkPrice;
+            //Сумма монет определенного номинала в автомате
+            int SumTotal = 0;
+
+            for (int i = moneyInVendingMashine.Count - 1; i >= 0; i--)
+            {
+                SumTotal = moneyInVendingMashine[i].Quantity + customerMoney[i].Quantity;
+
+                if (amountOfChange < moneyInVendingMashine[i].Rating)
+                {
+                    continue;
+                }
+                else if (amountOfChange == moneyInVendingMashine[i].Rating)
+                {
+                    if (SumTotal != 0)
+                    {
+                        amountOfChange = 0;
+                        moneyForChange[i].Quantity++;
+                        Transaction = true;
+                        break;
+                        //moneyInVendingMachine[i].Quantity--;
+                        //Выдать сдачу
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else if (SumTotal != 0)
+                {
+                    while (SumTotal != 0 && amountOfChange >= moneyInVendingMashine[i].Rating)
+                    {
+                        moneyForChange[i].Quantity++;
+                        amountOfChange -= moneyInVendingMashine[i].Rating;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+
+            }
+
+            //вспомогательная функция
+            return myChande();
+
+        }
+
+        //Выдать сдачу
+        public string myChande()
+        {
+            string change = "Монеты для садчи\n";
+
+            //перекладываем монеты из коллекции клиента в коллекцию автомата
+            for (int i = 0; i < customerMoney.Count; i++)
+            {
+                moneyInVendingMashine[i].Quantity += customerMoney[i].Quantity;
+            }
+
+            //очищаем коллекцию клиента
+            ClearClientCollection();
+
+            //убираем из автомата монеты, которые пойдут на сдачу
+            for (int j = 0; j < moneyForChange.Count; j++)
+            {
+                moneyInVendingMashine[j].Quantity -= moneyForChange[j].Quantity;
+            }
+
+            //формируем строку для сдачи
+            for (int j = 0; j < moneyForChange.Count; j++)
+            {
+                change += $"{moneyInVendingMashine[j].Quantity.ToString()} штук по {moneyInVendingMashine[j].Rating.ToString()}";
+            }
+
+            return change;
+        }
+
+        //очистить коллекцию клиента
+        public void ClearClientCollection()
+        {
+            for (int i = 0; i < moneyInVendingMashine.Count; i++)
+            {
+                moneyForChange.Add(new Money(moneyInVendingMashine[i].Rating, 0));
+            }
         }
     }
 }
