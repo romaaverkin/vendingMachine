@@ -9,10 +9,12 @@ namespace FlowLayoutPanel
     class VendingMachine
     {
 
-        public int moneyInvested { get; set; }
-        public int selectedDrinkPrice { get; set; }
-        public bool publicIsSelected { get; set; } = false;
+        bool Transaction { get; set; } = false; //Прошла ли трнзакция
+        public int AmountPaid { get; set; } = 0; //Внесенная клиентом сумма
+        public int SelectedDrinkPrice { get; set; } //Цена выбранного клиентом напитка
+        public bool AmountPaidInFull { get; set; } = false; //Полностью внесенная сумма
 
+        //Коллекция видов кофе
         public List<Drink> myDrinks = new List<Drink>
         {
             new Drink("Черный кофе", 16),
@@ -22,13 +24,60 @@ namespace FlowLayoutPanel
             new Drink("Латте", 39)
         };
 
-        public List<Money> myMoney = new List<Money>
+        //Коллекция видов монет
+        public List<Money> moneyInVendingMashine = new List<Money>
         {
+            //new Money(2, 10),
+            //new Money(10, 0),
+            //new Money(5, 10),
+            //new Money(25, 2),
+            //new Money(1, 0)
+
             new Money(2, 10),
-            new Money(10, 0),
+            new Money(10, 15),
             new Money(5, 10),
             new Money(25, 2),
+            new Money(1, 10)
+        };
+
+        //Внесенные клиентом монеты до транзакции
+        public List<Money> customerMoney = new List<Money>
+        {
+            new Money(2, 0),
+            new Money(10, 0),
+            new Money(5, 0),
+            new Money(25, 0),
             new Money(1, 0)
         };
+
+        //Клиент вносит деньги
+        public void CustomerDepositsMoney(int tag)
+        {
+            customerMoney.Sort();
+            customerMoney[tag].Quantity++;
+            AmountPaid += customerMoney[tag].Rating;
+        }
+
+        //Узнать сколько денег осталось заплатить
+        public string FindOutHowMuchMoneyIsLeftToPay()
+        {
+            if (SelectedDrinkPrice > AmountPaid)
+            {
+                return $"Вы внесли {AmountPaid} руб.\n" +
+                        $"Осталось {SelectedDrinkPrice - AmountPaid} руб.";
+            }
+            else if (SelectedDrinkPrice == AmountPaid)
+            {
+                AmountPaidInFull = true;
+                return $"Вы внесли {AmountPaid} руб.\n" +
+                        $"Ваша сдача 0 руб.";
+            }
+            else
+            {
+                AmountPaidInFull = true;
+                return $"Вы внесли {AmountPaid} руб.\n" +
+                    $"Ваша сдача {AmountPaid - SelectedDrinkPrice} руб.";
+            }
+        }
     }
 }

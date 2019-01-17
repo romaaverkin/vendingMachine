@@ -13,38 +13,38 @@ namespace FlowLayoutPanel
     {
         VendingMachine vendingMachine;
 
-        private void howMuchMoneyInTheMachine()
+        private void HowMuchMoneyInTheMachine()
         {
             string currentBalanse = "Сейчас есть\n";
 
-            foreach (Money money in vendingMachine.myMoney)
+            foreach (Money money in vendingMachine.moneyInVendingMashine)
             {
                 currentBalanse += $"{money.Rating} руб. в количестве {money.Quantity} штук\n";
             }
             currentBalanceVendingMachineLabel.Text = currentBalanse;
         }
 
-        private void lockReceiveButtons()
+        private void LockReceiveButtons()
         {
-            if (!vendingMachine.publicIsSelected)
+            if (!vendingMachine.AmountPaidInFull)
             {
-                for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+                for (int i = 0; i < vendingMachine.moneyInVendingMashine.Count; i++)
                 {
                     flowLayoutPanel2.Controls["moneyButton" + i].Enabled = true;
                 }
             }
             else
             {
-                for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+                for (int i = 0; i < vendingMachine.moneyInVendingMashine.Count; i++)
                 {
                     flowLayoutPanel2.Controls["moneyButton" + i].Enabled = false;
                 }
             }
         }
 
-        private void lockDrinkButtons()
+        private void LockDrinkButtons()
         {
-            if (!vendingMachine.publicIsSelected)
+            if (!vendingMachine.AmountPaidInFull)
             {          
                 for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
                 {
@@ -62,17 +62,17 @@ namespace FlowLayoutPanel
 
         public void yourChange()
         {
-            int remainingChange = vendingMachine.moneyInvested - vendingMachine.selectedDrinkPrice;
+            int remainingChange = vendingMachine.AmountPaid - vendingMachine.SelectedDrinkPrice;
             int totalSurrender = remainingChange;
-            List<Money> moneyInVendingMachine = vendingMachine.myMoney;
+            List<Money> moneyInVendingMachine = vendingMachine.moneyInVendingMashine;
             List<Money> moneyForChange = new List<Money>();
 
-            for (int n = 0; n < vendingMachine.myMoney.Count; n++)
+            for (int n = 0; n < vendingMachine.moneyInVendingMashine.Count; n++)
             {
-                moneyForChange.Add(new Money(vendingMachine.myMoney[n].Rating, 0));
+                moneyForChange.Add(new Money(vendingMachine.moneyInVendingMashine[n].Rating, 0));
             }
 
-            for (int i = vendingMachine.myMoney.Count - 1; i >= 0; i--)
+            for (int i = vendingMachine.moneyInVendingMashine.Count - 1; i >= 0; i--)
             {
                 if (remainingChange < moneyInVendingMachine[i].Rating)
                 {
@@ -127,22 +127,8 @@ namespace FlowLayoutPanel
             else
             {
                 yourСhangelabel.Text = "Извините не хватает\nсдачи для выдачи";
-            }
-                                    
-
-            //countNumberCoinsInVendingMashine(moneyForChange, moneyInVendingMachine);
+            }                                   
         }
-
-        //private void returnMoneyToTheClient(List<Money> moneyForChange, List<Money> moneyInVendingMachine)
-        //{
-        //    for (int i = 0; i < moneyForChange.Count; i++)
-        //    {
-        //        if (moneyForChange[i].Quantity != 0)
-        //        {
-        //            moneyInVendingMachine[i].Quantity -= moneyForChange[i].Quantity;
-        //        }
-        //    }
-        //}
 
         public Form1()
         {
@@ -152,7 +138,7 @@ namespace FlowLayoutPanel
         private void Form1_Load(object sender, EventArgs e)
         {
             vendingMachine = new VendingMachine();
-            vendingMachine.myMoney.Sort();
+            vendingMachine.moneyInVendingMashine.Sort();
             vendingMachine.myDrinks.Sort();
 
             for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
@@ -165,71 +151,64 @@ namespace FlowLayoutPanel
                     Text = $"{vendingMachine.myDrinks[i].Name} - {vendingMachine.myDrinks[i].Price} руб.",
                 };
 
-                drinkButton.Click += drinkButtonOnClick;
+                drinkButton.Click += DrinkButtonOnClick;
                 flowLayoutPanel1.Controls.Add(drinkButton);
             };
 
-            for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+            for (int i = 0; i < vendingMachine.moneyInVendingMashine.Count; i++)
             {
                 Button moneyButton = new Button()
                 {
                     Name = "moneyButton" + i,
                     Width = 150,
                     Tag = i,
-                    Text = $"Внести {vendingMachine.myMoney[i].Rating} руб.",
+                    Text = $"Внести {vendingMachine.moneyInVendingMashine[i].Rating} руб.",
                     Enabled = false
                 };
 
-                moneyButton.Click += moneyButtonOnClick;
+                moneyButton.Click += MoneyButtonOnClick;
                 flowLayoutPanel2.Controls.Add(moneyButton);
             };
 
-            howMuchMoneyInTheMachine();
+            HowMuchMoneyInTheMachine();
         }
 
-        private void moneyButtonOnClick(object sender, EventArgs e)
+        //Нажатие кнопки внесения денег
+        private void MoneyButtonOnClick(object sender, EventArgs e)
         {
-            var button = (Button)sender;
+            Button button = (Button)sender;
 
-            if (button != null)
+            int buttonTag = Convert.ToInt32(button.Tag);
+            vendingMachine.CustomerDepositsMoney(buttonTag);
+
+            int selectedDrinkPrice = vendingMachine.SelectedDrinkPrice;
+            int moneyInvested = vendingMachine.AmountPaid;
+
+            string amountPaidAndChange = vendingMachine.FindOutHowMuchMoneyIsLeftToPay();
+
+            if (selectedDrinkPrice > moneyInvested)
             {
-                int buttonTag = Convert.ToInt32(button.Tag);
-                Money insertedCoin = vendingMachine.myMoney[buttonTag];
-
-                vendingMachine.moneyInvested += insertedCoin.Rating;
-                insertedCoin.Quantity++;
-
-                int selectedDrinkPrice = vendingMachine.selectedDrinkPrice;
-                int moneyInvested = vendingMachine.moneyInvested;
-
-                if (selectedDrinkPrice > moneyInvested)
-                {
-                    paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
-                        $"Осталось {selectedDrinkPrice - moneyInvested} руб.";
-                }
-                else if (selectedDrinkPrice == moneyInvested)
-                {
-                    buyButton.Enabled = true;
-                    paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
-                        $"Ваша сдача 0 руб.";
-                    vendingMachine.publicIsSelected = true;
-                    lockReceiveButtons();
-                }
-                else
-                {
-                    buyButton.Enabled = true;
-                    paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
-                        $"Ваша сдача {moneyInvested - selectedDrinkPrice} руб.";
-                    vendingMachine.publicIsSelected = true;
-                    yourChange();
-                    lockReceiveButtons();
-                }
-
-                howMuchMoneyInTheMachine();
+                paymentLabel.Text = amountPaidAndChange;
             }
+            else if (selectedDrinkPrice == moneyInvested)
+            {
+                buyButton.Enabled = true;
+                paymentLabel.Text = amountPaidAndChange;
+                LockReceiveButtons();
+            }
+            else
+            {
+                buyButton.Enabled = true;
+                paymentLabel.Text = amountPaidAndChange;
+                LockReceiveButtons();
+                yourChange();
+            }
+
+            HowMuchMoneyInTheMachine();
+
         }
 
-        private void drinkButtonOnClick(object sender, EventArgs e)
+        private void DrinkButtonOnClick(object sender, EventArgs e)
         {
             var button = (Button)sender;
 
@@ -238,22 +217,22 @@ namespace FlowLayoutPanel
                 int buttonTag = Convert.ToInt32(button.Tag);
                 Drink selectedDrink = vendingMachine.myDrinks[buttonTag];
 
-                vendingMachine.selectedDrinkPrice = selectedDrink.Price;
+                vendingMachine.SelectedDrinkPrice = selectedDrink.Price;
                 selectDrinkButton.Text = $"Вы выбрали\n{selectedDrink.Name} цена {selectedDrink.Price} руб.";
-                vendingMachine.publicIsSelected = false;
+                vendingMachine.AmountPaidInFull = false;
 
-                lockReceiveButtons();
-                lockDrinkButtons();
+                LockReceiveButtons();
+                LockDrinkButtons();
             }
         }
 
-        private void buyButton_Click(object sender, EventArgs e)
+        private void BuyButton_Click(object sender, EventArgs e)
         {
             buyButton.Enabled = false;
             yourСhangelabel.Text = "";
-            vendingMachine.moneyInvested = 0;
-            vendingMachine.publicIsSelected = true;
-            lockDrinkButtons();
+            vendingMachine.AmountPaid = 0;
+            vendingMachine.AmountPaidInFull = true;
+            LockDrinkButtons();
             paymentLabel.Text = "Вы внесли 0 руб.";
             selectDrinkButton.Text = "Выберите напиток";
             MessageBox.Show("Спасибо за покупку!");
