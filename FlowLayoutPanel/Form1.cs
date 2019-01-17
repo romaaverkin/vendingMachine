@@ -100,6 +100,19 @@ namespace FlowLayoutPanel
             }
 
             yourСhangelabel.Text = change;
+
+            countNumberCoinsInVendingMashine(moneyForChange, moneyInVendingMachine);
+        }
+
+        private void countNumberCoinsInVendingMashine(List<Money> moneyForChange, List<Money> moneyInVendingMachine)
+        {
+            for (int i = 0; i < moneyForChange.Count; i++)
+            {
+                if (moneyForChange[i].Quantity != 0)
+                {
+                    moneyInVendingMachine[i].Quantity -= moneyForChange[i].Quantity;
+                }
+            }
         }
 
         public Form1()
