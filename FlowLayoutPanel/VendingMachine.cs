@@ -9,11 +9,13 @@ namespace FlowLayoutPanel
     class VendingMachine
     {
 
-        bool Transaction { get; set; } = false; //Прошла ли трнзакция
+        public bool Transaction { get; set; } = false; //Прошла ли трнзакция
         public int AmountPaid { get; set; } = 0; //Внесенная клиентом сумма
         public int SelectedDrinkPrice { get; set; } //Цена выбранного клиентом напитка
         public bool AmountPaidInFull { get; set; } = false; //Полностью внесенная сумма
         public List<Money> moneyForChange = new List<Money>(); //монеты для сдачи
+
+        int amountOfChange;
 
         //Коллекция видов кофе
         public List<Drink> myDrinks = new List<Drink>
@@ -28,17 +30,17 @@ namespace FlowLayoutPanel
         //Коллекция видов монет
         public List<Money> moneyInVendingMashine = new List<Money>
         {
-            //new Money(2, 10),
-            //new Money(10, 0),
-            //new Money(5, 10),
-            //new Money(25, 2),
-            //new Money(1, 0)
-
             new Money(2, 10),
-            new Money(10, 10),
+            new Money(10, 0),
             new Money(5, 10),
             new Money(25, 2),
-            new Money(1, 15)
+            new Money(1, 0)
+
+            //new Money(2, 10),
+            //new Money(10, 10),
+            //new Money(5, 10),
+            //new Money(25, 2),
+            //new Money(1, 15)
         };
 
         //Конструктор
@@ -101,7 +103,14 @@ namespace FlowLayoutPanel
         {
 
             //сумма сдачи
-            int amountOfChange = AmountPaid - SelectedDrinkPrice;
+            if (Transaction)
+            {
+                amountOfChange = AmountPaid - SelectedDrinkPrice;
+            }
+            else
+            {
+                amountOfChange = AmountPaid;
+            }
 
             for (int i = moneyInVendingMashine.Count - 1; i >= 0; i--)
             {
@@ -140,8 +149,6 @@ namespace FlowLayoutPanel
                 }
 
             }
-
-            AmountPaid = 0;
             //вспомогательная функция
             return MyChange();
 
@@ -150,7 +157,25 @@ namespace FlowLayoutPanel
         //Выдать сдачу
         public string MyChange()
         {
-            string change = "Монеты для садчи\n";
+            string change = "Монеты для сдачи\n";
+
+            int sumMoneyForChange = 0;
+
+            for (int i = 0; i < moneyForChange.Count; i++)
+            {
+                sumMoneyForChange += moneyForChange[i].Quantity * moneyForChange[i].Rating;
+            }
+
+            if (sumMoneyForChange < AmountPaid - SelectedDrinkPrice)
+            {
+                Transaction = false;
+                amountOfChange = AmountPaid;
+                YourChange();
+            }
+            else
+            {
+                Transaction = true;
+            }
 
             //формируем строку для сдачи
             for (int j = 0; j < moneyForChange.Count; j++)
@@ -158,6 +183,8 @@ namespace FlowLayoutPanel
                 change += $"{moneyForChange[j].Quantity.ToString()} штук по {moneyForChange[j].Rating.ToString()}\n";
             }
 
+            AmountPaid = 0;
+            Transaction = false;
             //очищаем коллекцию для сдачи
             for (int i = 0; i < moneyInVendingMashine.Count; i++)
             {

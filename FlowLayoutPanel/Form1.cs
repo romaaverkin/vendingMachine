@@ -169,8 +169,16 @@ namespace FlowLayoutPanel
             LockDrinkButtons();
             paymentLabel.Text = "Вы внесли 0 руб.";
             selectDrinkButton.Text = "Выберите напиток";
-            MessageBox.Show("Спасибо за покупку!");
+
             yourСhangelabel.Text = vendingMachine.YourChange();
+            if (vendingMachine.Transaction)
+            {
+                MessageBox.Show("Спасибо за покупку!");
+            }
+            else
+            {
+                MessageBox.Show("Извините в автомате нет денег для сдачи.\nЗаберите свом деньги.");
+            }
             HowMuchMoneyInTheMachine();
         }
     }
