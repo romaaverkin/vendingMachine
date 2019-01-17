@@ -220,6 +220,7 @@ namespace FlowLayoutPanel
 
         private void buyButton_Click(object sender, EventArgs e)
         {
+            buyButton.Enabled = false;
             yourСhangelabel.Text = "";
             vendingMachine.moneyInvested = 0;
             vendingMachine.publicIsSelected = true;
