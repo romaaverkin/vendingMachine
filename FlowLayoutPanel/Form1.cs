@@ -62,9 +62,8 @@ namespace FlowLayoutPanel
 
         public void yourChange()
         {
-            int remainingChange = vendingMachine.moneyInvested;
+            int remainingChange = vendingMachine.moneyInvested - vendingMachine.selectedDrinkPrice;
             List<Money> moneyInVendingMachine = vendingMachine.myMoney;
-            int difference = 0;
             List<Money> moneyForChange = new List<Money>();
 
             for (int n = 0; n < vendingMachine.myMoney.Count; n++)
@@ -72,10 +71,8 @@ namespace FlowLayoutPanel
                 moneyForChange.Add(new Money(vendingMachine.myMoney[n].Rating, 0));
             }
 
-            for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+            for (int i = vendingMachine.myMoney.Count - 1; i >= 0; i--)
             {
-                difference = remainingChange - moneyInVendingMachine[i].Rating;
-
                 if (remainingChange < moneyInVendingMachine[i].Rating)
                 {
                     continue;
@@ -83,18 +80,26 @@ namespace FlowLayoutPanel
                 else if (remainingChange == moneyInVendingMachine[i].Rating)
                 {
                     remainingChange = 0;
-                    MessageBox.Show($"Ваша сдача {remainingChange}");
+                    moneyForChange[i].Quantity++;
                 }
-                else if (remainingChange - moneyInVendingMachine[i].Rating > moneyInVendingMachine[i].Rating)
+                else
                 {
-                    while (difference > moneyInVendingMachine[i].Rating)
+                    while (remainingChange >= moneyInVendingMachine[i].Rating)
                     {
                         moneyForChange[i].Quantity++;
-                        difference -= moneyInVendingMachine[i].Rating;
                         remainingChange -= moneyInVendingMachine[i].Rating;
                     }
                 }
             }
+
+            string change = "";
+
+            for (int m = 0; m < moneyForChange.Count; m++)
+            {
+                change += $"{moneyForChange[m].Quantity.ToString()} штук по {moneyForChange[m].Rating.ToString()} рублей\n";
+            }
+
+            MessageBox.Show(change);
         }
 
         public Form1()
@@ -173,6 +178,7 @@ namespace FlowLayoutPanel
                     paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
                         $"Ваша сдача {selectedDrinkPrice - moneyInvested} руб.";
                     vendingMachine.publicIsSelected = true;
+                    yourChange();
                     lockReceiveButtons();
                 }
 
