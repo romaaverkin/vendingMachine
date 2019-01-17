@@ -63,6 +63,7 @@ namespace FlowLayoutPanel
         public void yourChange()
         {
             int remainingChange = vendingMachine.moneyInvested - vendingMachine.selectedDrinkPrice;
+            int totalSurrender = remainingChange;
             List<Money> moneyInVendingMachine = vendingMachine.myMoney;
             List<Money> moneyForChange = new List<Money>();
 
@@ -79,41 +80,69 @@ namespace FlowLayoutPanel
                 }
                 else if (remainingChange == moneyInVendingMachine[i].Rating)
                 {
-                    remainingChange = 0;
-                    moneyForChange[i].Quantity++;
+                    if (moneyInVendingMachine[i].Quantity != 0)
+                    {
+                        remainingChange = 0;
+                        moneyForChange[i].Quantity++;
+                        moneyInVendingMachine[i].Quantity--;
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
-                else
+                else if (moneyInVendingMachine[i].Quantity != 0)
                 {
-                    while (remainingChange >= moneyInVendingMachine[i].Rating)
+                    while (moneyInVendingMachine[i].Quantity != 0 && remainingChange >= moneyInVendingMachine[i].Rating)
                     {
                         moneyForChange[i].Quantity++;
+                        moneyInVendingMachine[i].Quantity--;
                         remainingChange -= moneyInVendingMachine[i].Rating;
                     }
                 }
-            }
-
-            string change = "Монеты для садчи\n";
-
-            for (int m = 0; m < moneyForChange.Count; m++)
-            {
-                change += $"{moneyForChange[m].Quantity.ToString()} штук по {moneyForChange[m].Rating.ToString()} рублей\n";
-            }
-
-            yourСhangelabel.Text = change;
-
-            countNumberCoinsInVendingMashine(moneyForChange, moneyInVendingMachine);
-        }
-
-        private void countNumberCoinsInVendingMashine(List<Money> moneyForChange, List<Money> moneyInVendingMachine)
-        {
-            for (int i = 0; i < moneyForChange.Count; i++)
-            {
-                if (moneyForChange[i].Quantity != 0)
+                else
                 {
-                    moneyInVendingMachine[i].Quantity -= moneyForChange[i].Quantity;
+                    continue;
                 }
             }
+
+            int changeinList = 0;
+
+            for (int j = 0; j < moneyForChange.Count; j++)
+            {
+                changeinList += moneyForChange[j].Quantity * moneyForChange[j].Rating;
+            }
+
+            if (changeinList > totalSurrender)
+            {
+                string change = "Монеты для садчи\n";
+
+                for (int m = 0; m < moneyForChange.Count; m++)
+                {
+                    change += $"{moneyForChange[m].Quantity.ToString()} штук по {moneyForChange[m].Rating.ToString()} рублей\n";
+                }
+
+                yourСhangelabel.Text = change;
+            }
+            else
+            {
+                yourСhangelabel.Text = "Извините не хватает\nсдачи для выдачи";
+            }
+                                    
+
+            //countNumberCoinsInVendingMashine(moneyForChange, moneyInVendingMachine);
         }
+
+        //private void returnMoneyToTheClient(List<Money> moneyForChange, List<Money> moneyInVendingMachine)
+        //{
+        //    for (int i = 0; i < moneyForChange.Count; i++)
+        //    {
+        //        if (moneyForChange[i].Quantity != 0)
+        //        {
+        //            moneyInVendingMachine[i].Quantity -= moneyForChange[i].Quantity;
+        //        }
+        //    }
+        //}
 
         public Form1()
         {

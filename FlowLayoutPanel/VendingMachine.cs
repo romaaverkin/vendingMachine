@@ -25,10 +25,10 @@ namespace FlowLayoutPanel
         public List<Money> myMoney = new List<Money>
         {
             new Money(2, 10),
-            new Money(10, 10),
+            new Money(10, 0),
             new Money(5, 10),
             new Money(25, 2),
-            new Money(1, 15)
+            new Money(1, 0)
         };
     }
 }
