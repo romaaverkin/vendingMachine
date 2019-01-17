@@ -110,6 +110,8 @@ namespace FlowLayoutPanel
         private void Form1_Load(object sender, EventArgs e)
         {
             vendingMachine = new VendingMachine();
+            vendingMachine.myMoney.Sort();
+            vendingMachine.myDrinks.Sort();
 
             for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
             {

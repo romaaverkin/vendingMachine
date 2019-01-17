@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FlowLayoutPanel
 {
-    class Drink
+    class Drink : IComparable
     {
         public Drink(string name, int price)
         {
@@ -15,5 +15,13 @@ namespace FlowLayoutPanel
 
         public string Name { get; set; }
         public int Price { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is Drink m)
+                return Price.CompareTo(m.Price);
+            else
+                throw new Exception("Невозможно сравнить два объекта");
+        }
     }
 }
