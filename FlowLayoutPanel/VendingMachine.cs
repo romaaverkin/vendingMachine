@@ -14,6 +14,13 @@ namespace FlowLayoutPanel
         public int SelectedDrinkPrice { get; set; } //Цена выбранного клиентом напитка
         public bool AmountPaidInFull { get; set; } = false; //Полностью внесенная сумма
 
+        public VendingMachine()
+        {
+            myDrinks.Sort();
+            moneyInVendingMashine.Sort();
+            customerMoney.Sort();
+        }
+                
         //Коллекция видов кофе
         public List<Drink> myDrinks = new List<Drink>
         {
@@ -53,7 +60,6 @@ namespace FlowLayoutPanel
         //Клиент вносит деньги
         public void CustomerDepositsMoney(int tag)
         {
-            customerMoney.Sort();
             customerMoney[tag].Quantity++;
             AmountPaid += customerMoney[tag].Rating;
         }
@@ -78,6 +84,20 @@ namespace FlowLayoutPanel
                 return $"Вы внесли {AmountPaid} руб.\n" +
                     $"Ваша сдача {AmountPaid - SelectedDrinkPrice} руб.";
             }
+        }
+
+        //Узнать сколько монет есть в машине
+        public string FindOutWhatCoinsInTheMachine()
+        {
+            List<Money> customerMoney123 = customerMoney;
+            string CoinsInTheMachine = "Сейчас есть\n";
+
+            for (int i = 0; i < moneyInVendingMashine.Count; i++)
+            {
+                CoinsInTheMachine += $"{moneyInVendingMashine[i].Rating} руб. в количестве {moneyInVendingMashine[i].Quantity + customerMoney[i].Quantity} штук\n";
+            }
+
+            return CoinsInTheMachine;
         }
     }
 }

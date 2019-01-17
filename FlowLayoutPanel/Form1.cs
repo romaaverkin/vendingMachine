@@ -13,15 +13,12 @@ namespace FlowLayoutPanel
     {
         VendingMachine vendingMachine;
 
+        //Какие монеты есть в автомате
         private void HowMuchMoneyInTheMachine()
         {
-            string currentBalanse = "Сейчас есть\n";
+            string CoinsInTheMachine = vendingMachine.FindOutWhatCoinsInTheMachine();
 
-            foreach (Money money in vendingMachine.moneyInVendingMashine)
-            {
-                currentBalanse += $"{money.Rating} руб. в количестве {money.Quantity} штук\n";
-            }
-            currentBalanceVendingMachineLabel.Text = currentBalanse;
+            currentBalanceVendingMachineLabel.Text = CoinsInTheMachine;
         }
 
         private void LockReceiveButtons()
@@ -138,8 +135,6 @@ namespace FlowLayoutPanel
         private void Form1_Load(object sender, EventArgs e)
         {
             vendingMachine = new VendingMachine();
-            vendingMachine.moneyInVendingMashine.Sort();
-            vendingMachine.myDrinks.Sort();
 
             for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
             {
@@ -201,7 +196,7 @@ namespace FlowLayoutPanel
                 buyButton.Enabled = true;
                 paymentLabel.Text = amountPaidAndChange;
                 LockReceiveButtons();
-                yourChange();
+                //yourChange();
             }
 
             HowMuchMoneyInTheMachine();
