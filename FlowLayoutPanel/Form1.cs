@@ -62,7 +62,39 @@ namespace FlowLayoutPanel
 
         public void yourChange()
         {
+            int remainingChange = vendingMachine.moneyInvested;
+            List<Money> moneyInVendingMachine = vendingMachine.myMoney;
+            int difference = 0;
+            List<Money> moneyForChange = new List<Money>();
 
+            for (int n = 0; n < vendingMachine.myMoney.Count; n++)
+            {
+                moneyForChange.Add(new Money(vendingMachine.myMoney[n].Rating, 0));
+            }
+
+            for (int i = 0; i < vendingMachine.myMoney.Count; i++)
+            {
+                difference = remainingChange - moneyInVendingMachine[i].Rating;
+
+                if (remainingChange < moneyInVendingMachine[i].Rating)
+                {
+                    continue;
+                }
+                else if (remainingChange == moneyInVendingMachine[i].Rating)
+                {
+                    remainingChange = 0;
+                    MessageBox.Show($"Ваша сдача {remainingChange}");
+                }
+                else if (remainingChange - moneyInVendingMachine[i].Rating > moneyInVendingMachine[i].Rating)
+                {
+                    while (difference > moneyInVendingMachine[i].Rating)
+                    {
+                        moneyForChange[i].Quantity++;
+                        difference -= moneyInVendingMachine[i].Rating;
+                        remainingChange -= moneyInVendingMachine[i].Rating;
+                    }
+                }
+            }
         }
 
         public Form1()
