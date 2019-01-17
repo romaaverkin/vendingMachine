@@ -21,7 +21,8 @@ namespace FlowLayoutPanel
             currentBalanceVendingMachineLabel.Text = CoinsInTheMachine;
         }
 
-        private void LockReceiveButtons()
+        //Если кофе не выбран то кнопки внести деньги не активны и наоборот
+        private void LockMoneyButtons()
         {
             if (!vendingMachine.AmountPaidInFull)
             {
@@ -39,6 +40,7 @@ namespace FlowLayoutPanel
             }
         }
 
+        //Если сумма за кофе внесена не полностью, то кнопуи выбора кофе не активны
         private void LockDrinkButtons()
         {
             if (!vendingMachine.AmountPaidInFull)
@@ -168,6 +170,27 @@ namespace FlowLayoutPanel
             HowMuchMoneyInTheMachine();
         }
 
+        //Кликаем по кнопке выбора кофе
+        private void DrinkButtonOnClick(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+
+            if (button != null)
+            {
+                int buttonTag = Convert.ToInt32(button.Tag);
+                Drink selectedDrink = vendingMachine.myDrinks[buttonTag];
+
+                vendingMachine.SelectedDrinkPrice = selectedDrink.Price;
+                selectDrinkButton.Text = $"Вы выбрали\n{selectedDrink.Name} цена {selectedDrink.Price} руб.";
+                vendingMachine.AmountPaidInFull = false;
+
+                //Если кофе не выбран то кнопки внести деньги не активны и наоборот
+                LockMoneyButtons();
+                //Если сумма за кофе внесена не полностью, то кнопуи выбора кофе не активны
+                LockDrinkButtons();
+            }
+        }
+
         //Нажатие кнопки внесения денег
         private void MoneyButtonOnClick(object sender, EventArgs e)
         {
@@ -189,36 +212,20 @@ namespace FlowLayoutPanel
             {
                 buyButton.Enabled = true;
                 paymentLabel.Text = amountPaidAndChange;
-                LockReceiveButtons();
+                //Если кофе не выбран то кнопки внести деньги не активны и наоборот
+                LockMoneyButtons();
             }
             else
             {
                 buyButton.Enabled = true;
                 paymentLabel.Text = amountPaidAndChange;
-                LockReceiveButtons();
+                //Если кофе не выбран то кнопки внести деньги не активны и наоборот
+                LockMoneyButtons();
                 //yourChange();
             }
 
             HowMuchMoneyInTheMachine();
 
-        }
-
-        private void DrinkButtonOnClick(object sender, EventArgs e)
-        {
-            var button = (Button)sender;
-
-            if (button != null)
-            {
-                int buttonTag = Convert.ToInt32(button.Tag);
-                Drink selectedDrink = vendingMachine.myDrinks[buttonTag];
-
-                vendingMachine.SelectedDrinkPrice = selectedDrink.Price;
-                selectDrinkButton.Text = $"Вы выбрали\n{selectedDrink.Name} цена {selectedDrink.Price} руб.";
-                vendingMachine.AmountPaidInFull = false;
-
-                LockReceiveButtons();
-                LockDrinkButtons();
-            }
         }
 
         private void BuyButton_Click(object sender, EventArgs e)
