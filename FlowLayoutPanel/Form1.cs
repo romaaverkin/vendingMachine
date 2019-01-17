@@ -92,14 +92,14 @@ namespace FlowLayoutPanel
                 }
             }
 
-            string change = "";
+            string change = "Монеты для садчи\n";
 
             for (int m = 0; m < moneyForChange.Count; m++)
             {
                 change += $"{moneyForChange[m].Quantity.ToString()} штук по {moneyForChange[m].Rating.ToString()} рублей\n";
             }
 
-            MessageBox.Show(change);
+            yourСhangelabel.Text = change;
         }
 
         public Form1()
@@ -109,7 +109,6 @@ namespace FlowLayoutPanel
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
             vendingMachine = new VendingMachine();
 
             for (int i = 0; i < vendingMachine.myDrinks.Count; i++)
@@ -176,7 +175,7 @@ namespace FlowLayoutPanel
                 {
                     buyButton.Enabled = true;
                     paymentLabel.Text = $"Вы внесли {Convert.ToString(moneyInvested)} руб.\n" +
-                        $"Ваша сдача {selectedDrinkPrice - moneyInvested} руб.";
+                        $"Ваша сдача {moneyInvested - selectedDrinkPrice} руб.";
                     vendingMachine.publicIsSelected = true;
                     yourChange();
                     lockReceiveButtons();
@@ -206,6 +205,7 @@ namespace FlowLayoutPanel
 
         private void buyButton_Click(object sender, EventArgs e)
         {
+            yourСhangelabel.Text = "";
             vendingMachine.moneyInvested = 0;
             vendingMachine.publicIsSelected = true;
             lockDrinkButtons();
